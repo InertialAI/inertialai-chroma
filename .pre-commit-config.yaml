@@ -1,0 +1,85 @@
+minimum_prek_version: "0.3.5"
+repos:
+  # General checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        stages: [pre-commit]
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+        stages: [pre-commit]
+      - id: trailing-whitespace
+        stages: [pre-commit]
+
+  # Ruff - linting + formatting
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.5
+    hooks:
+      # Sort imports
+      - id: ruff
+        stages: [pre-commit]
+        args: ["check", "--select", "I", "--fix"]
+        types: [python]
+      # Run the linter
+      - id: ruff
+        stages: [pre-commit]
+        args: [--fix]
+      # Run the formatter
+      - id: ruff-format
+        stages: [pre-commit]
+
+  # docformatter - formats docstrings to follow PEP 257
+  - repo: https://github.com/pycqa/docformatter
+    rev: v1.7.7
+    hooks:
+      - id: docformatter
+        name: docformatter
+        stages: [pre-commit]
+        args:
+          [
+            -r,
+            -i,
+            --pre-summary-newline,
+            --make-summary-multi-line,
+            --wrap-summaries,
+            "90",
+            --wrap-descriptions,
+            "90",
+            src,
+            tests,
+          ]
+
+  # Local - hooks that use local commands
+  - repo: local
+    hooks:
+      # Ensure uv.lock is up to date
+      - id: uv-lock
+        name: Check uv.lock
+        stages: [pre-commit]
+        entry: bash -c 'make update-lockfile'
+        language: system
+        types: [python]
+        always_run: true
+        pass_filenames: false
+
+      # Mypy - static type checker
+      - id: mypy
+        name: Running Mypy type checker
+        stages: [pre-commit]
+        entry: bash -c 'make type-check'
+        language: system
+        types: [python]
+        require_serial: true
+        verbose: true
+
+      # Run the tests
+      - id: test-hook
+        name: Running tests
+        stages: [pre-push]
+        entry: bash -c 'make test'
+        language: system
+        types: [python]
+        pass_filenames: false
+        always_run: true
+        verbose: true
