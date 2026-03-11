@@ -12,11 +12,11 @@
 
 InertialAI's `inertial-embed-alpha` model produces dense vector embeddings from three input types:
 
-| Input type | Example |
-|---|---|
-| **Text only** | `"temperature spike at noon"` |
-| **Time-series only** | `[[72, 74, 73, 75, 71]]` (e.g. heart rate readings) |
-| **Multi-modal** | A time-series signal paired with its natural language description, combined into a single vector |
+| Input type           | Example                                                                                          |
+| -------------------- | ------------------------------------------------------------------------------------------------ |
+| **Text only**        | `"temperature spike at noon"`                                                                    |
+| **Time-series only** | `[[72, 74, 73, 75, 71]]` (e.g. heart rate readings)                                              |
+| **Multi-modal**      | A time-series signal paired with its natural language description, combined into a single vector |
 
 Multi-modal embeddings are InertialAI's core differentiator — a single vector that captures both the numerical signal and its semantic context simultaneously, enabling richer similarity search across domains like industrial IoT, healthcare, and financial markets.
 
@@ -26,7 +26,7 @@ Multi-modal embeddings are InertialAI's core differentiator — a single vector 
 
 ## Requirements
 
-- Python 3.10 or later
+- Python 3.11 or later
 - An InertialAI API key — [sign up at app.inertialai.com](https://app.inertialai.com)
 - A running Chroma instance — see [Chroma Docker deployment](https://docs.trychroma.com/guides/deploy/docker)
 
@@ -127,13 +127,13 @@ InertialAIEmbeddingFunction(
 )
 ```
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `api_key_env_var` | `str` | `"INERTIALAI_API_KEY"` | Name of the environment variable holding the API key |
-| `model_name` | `str` | `"inertial-embed-alpha"` | InertialAI model to use for embedding |
-| `dimensions` | `int \| None` | `None` | Truncate embedding output to this many dimensions |
-| `timeout` | `float` | `60.0` | HTTP request timeout in seconds |
-| `api_key` | `str \| None` | `None` | *(Deprecated)* Pass the key value directly — not persisted by Chroma; prefer `api_key_env_var` |
+| Parameter         | Type          | Default                  | Description                                                                                    |
+| ----------------- | ------------- | ------------------------ | ---------------------------------------------------------------------------------------------- |
+| `api_key_env_var` | `str`         | `"INERTIALAI_API_KEY"`   | Name of the environment variable holding the API key                                           |
+| `model_name`      | `str`         | `"inertial-embed-alpha"` | InertialAI model to use for embedding                                                          |
+| `dimensions`      | `int \| None` | `None`                   | Truncate embedding output to this many dimensions                                              |
+| `timeout`         | `float`       | `60.0`                   | HTTP request timeout in seconds                                                                |
+| `api_key`         | `str \| None` | `None`                   | _(Deprecated)_ Pass the key value directly — not persisted by Chroma; prefer `api_key_env_var` |
 
 > **Note:** `model_name` and `dimensions` are immutable after a collection is created — changing either would invalidate the existing vector index.
 

@@ -2,8 +2,9 @@
 
 ## Prerequisites
 
-- Python 3.9+
+- Python 3.11+
 - [uv](https://docs.astral.sh/uv/) — used for dependency management and running all tooling
+- [make](https://www.gnu.org/software/make/) — used for running tasks
 
 ## Setup
 
