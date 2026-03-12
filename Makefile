@@ -165,3 +165,44 @@ clean: ## Remove build artifacts and temporary files
 nuke: ## Remove build artifacts, temporary files, the .venv directory and the uv.lock file
 	make clean
 	rm -rf .venv && rm -f uv.lock
+
+
+# Example Setup Targets
+# ----------------------------------------
+
+EXAMPLES_DIR := examples
+
+.PHONY: example-data-fetch
+example-data-fetch: ## Download sample data for the example setup
+	cd $(EXAMPLES_DIR) && ./data.sh fetch
+
+.PHONY: example-data-fetch-force
+example-data-fetch-force: ## Force re-download sample data for the example setup
+	cd $(EXAMPLES_DIR) && ./data.sh fetch --force
+
+.PHONY: example-data-clean
+example-data-clean: ## Remove sample data from the example setup
+	cd $(EXAMPLES_DIR) && ./data.sh clean
+
+.PHONY: example-init-env
+example-init-env: ## Copy .env.example to .env in the example setup directory (skips if .env already exists)
+	@test -f $(EXAMPLES_DIR)/.env && echo "$(EXAMPLES_DIR)/.env already exists — skipping." || cp $(EXAMPLES_DIR)/.env.example $(EXAMPLES_DIR)/.env && echo "Created $(EXAMPLES_DIR)/.env — add your INERTIALAI_API_KEY."
+
+.PHONY: example-up
+example-up: ## Start the example setup (Chroma + demo app) in detached mode
+	docker compose -f $(EXAMPLES_DIR)/docker-compose.yml up -d --build
+
+.PHONY: example-down
+example-down: ## Stop the example setup
+	docker compose -f $(EXAMPLES_DIR)/docker-compose.yml down
+
+.PHONY: example-logs
+example-logs: ## Stream logs from the example setup
+	docker compose -f $(EXAMPLES_DIR)/docker-compose.yml logs -f
+
+.PHONY: example-reset
+example-reset: example-down ## Stop the example setup and remove all Docker volumes (clears Chroma data)
+	docker compose -f $(EXAMPLES_DIR)/docker-compose.yml down -v
+
+.PHONY: example-clean
+example-clean: example-reset example-data-clean ## Full cleanup: stop services, remove volumes, delete sample data

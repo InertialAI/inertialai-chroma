@@ -120,8 +120,8 @@ print(results["documents"])
 
 ```python
 InertialAIEmbeddingFunction(
-    api_key_env_var="INERTIALAI_API_KEY",  # default
-    model_name="inertial-embed-alpha",     # default
+    api_key_env_var="INERTIALAI_API_KEY",   # default
+    model_name="inertial-embed-alpha",      # default
     dimensions=None,                        # default — use full embedding size
     timeout=60.0,                           # default — seconds
 )
@@ -142,6 +142,24 @@ InertialAIEmbeddingFunction(
 ## Collection Persistence
 
 When Chroma persists a collection to disk, it serialises the embedding function via `get_config()`. `InertialAIEmbeddingFunction` stores the **environment variable name**, never the key value itself, so serialised collections are safe to commit to version control. At load time, `build_from_config()` resolves the key from the environment automatically — no credentials need to be passed explicitly.
+
+---
+
+## Example
+
+The [`examples/`](examples/) directory contains a fully working local demo that showcases multi-modal embeddings end-to-end using real ECG data:
+
+- **Dataset:** [ECG5000](https://timeseriesclassification.com/description.php?Dataset=ECG5000) — 200 stratified samples, each stored as a fused `{"text": "<diagnosis>", "time_series": [[...140 readings...]]}` document
+- **Vector store:** Chroma, running in Docker
+- **UI:** Streamlit web app with semantic search and ECG waveform visualisation
+
+```bash
+make example-data-fetch          # download ECG5000 dataset
+make example-init-env            # copy .env.example → .env (then add your INERTIALAI_API_KEY)
+make example-up                  # start Chroma + Streamlit at http://localhost:8501
+```
+
+See [`examples/README.md`](examples/README.md) for the full setup guide and suggested search queries that demonstrate the value of multi-modal embeddings over text-only retrieval.
 
 ---
 

@@ -122,3 +122,9 @@ CLAUDE.md
 
 # Kiro
 .kiro/
+
+# Example setup
+examples/sample-data/*
+!examples/sample-data/.gitkeep
+examples/.env
+examples/demo-app/chroma-data/
